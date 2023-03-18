@@ -9,10 +9,40 @@
 #include <time.h>
 using namespace std;
 
+char field[10][10]; //BOT field
+char fieldPOLYG[10][10]; //POLYGON field
+char letter[11] = {'X', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'L', 'J'};
+char fieldUSER[10][10]; //USER field
+
+void printPLG_USR()
+{
+    cout << "\n\n      Ваше поле " << "\t\t\t\t" << "   Поле противника " << endl;
+    for(int i=0; i<11; i++)
+    {
+        for(int j=0; j<23; j++)
+        {
+            if(i == 0 && j<11)
+                cout << j << " ";
+            else if(j>0 && i>0 && j<11)
+                cout<<fieldUSER[i-1][j-1]<<" ";
+            else if(j==11)
+                cout << "\t\t\t\t";
+            else if(j==12 && i>0)
+                cout << letter[i] << " ";
+            else if(i == 0 && j>11)
+                cout << j-12 << " ";
+            else if(j>12 && i>0)
+                cout<<fieldPOLYG[i-1][j-13]<<" ";
+        }
+        if(i == 10)
+            break;
+        cout << endl << letter[i+1] << " ";
+    }
+}
+
 void ai_field()
 {
     srand(time(NULL));
-    char field[10][10];
     int cordX, cordY, FcordX, FcordY;
     //reset field(.)
     for(int i=0; i<10; i++)
@@ -22,7 +52,6 @@ void ai_field()
             field[i][j]='.';
         }
     }
-
     //set smlShp
     short int stepSMLSHP=4;
     //def
@@ -43,7 +72,6 @@ void ai_field()
         else
             stepSMLSHP++;
     }
-
     //set duoShp
     short int stepDUOSHP=3;
     for(int i=0; i<stepDUOSHP; i++)
@@ -100,7 +128,6 @@ void ai_field()
                 break;
         }
     }
-
     //set trioShp
     short int stepTRSHP=2;
     for(int i=0; i<stepTRSHP; i++)
@@ -165,7 +192,6 @@ void ai_field()
                 break;
         }
     }
-
     //set SqShp
     short int stepSQSHP=1;
     for(int i=0; i<stepSQSHP; i++)
@@ -238,40 +264,12 @@ void ai_field()
                 break;
         }
     }
-
-    //printing field
-    cout << "FieldBOT: \n";
-    char letter[11] = {'X', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'L', 'J'};
-    //def
-    for(int i=0; i<11; i++)
-    {
-        for(int j=0; j<11; j++)
-        {
-            if(i == 0)
-                cout << j << " ";
-            else if(j>0 && i>0)
-                cout<<field[i-1][j-1]<<" ";
-        }
-        if(i == 10)
-            break;
-        cout << endl << letter[i+1] << " ";
-    }
-
     int y, x;
     char l;
-
-    char fieldPOLYG[10][10];
     //def
-    for(int i=0; i<10; i++){
-        for(int g=0; g<10; g++){
+    for(int i=0; i<10; i++) {
+        for (int g = 0; g < 10; g++) {
             fieldPOLYG[i][g] = '.';
-        }
-    }
-
-    char fieldUSER[10][10];
-    //def
-    for(int i=0; i<10; i++){
-        for(int g=0; g<10; g++){
             fieldUSER[i][g] = '.';
         }
     }
@@ -294,7 +292,6 @@ void ai_field()
         else
             stepSMLSHP++;
     }
-
     //set duoShp
     stepDUOSHP=3;
     for(int i=0; i<stepDUOSHP; i++)
@@ -351,7 +348,6 @@ void ai_field()
                 break;
         }
     }
-
     //set trioShp
     stepTRSHP=2;
     for(int i=0; i<stepTRSHP; i++)
@@ -416,7 +412,6 @@ void ai_field()
                 break;
         }
     }
-
     //set SqShp
     stepSQSHP=1;
     for(int i=0; i<stepSQSHP; i++)
@@ -502,8 +497,6 @@ void ai_field()
                     r++;
             }
         }
-        cout << "\nКоличество # у Вас: " << n << endl;
-        cout << "Количество # у Бота: " << 20-r << endl;
         if(n == 0)
         {
             system("clear");
@@ -516,75 +509,27 @@ void ai_field()
             cout << "\n\n\nИгра окончена, Вы выиграли!!!\n\n\n";
             break;
         }
-
-        //printing PlayerField
-        cout << "\n\nYou field: \n";
-        char letter[11] = {'X', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'L', 'J'};
-        for(int i=0; i<11; i++)
-        {
-            for(int j=0; j<11; j++)
-            {
-                if(i == 0)
-                    cout << j << " ";
-                else if(j>0 && i>0)
-                    cout<<fieldUSER[i-1][j-1]<<" ";
-            }
-            if(i == 10)
-                break;
-            cout << endl << letter[i+1] << " ";
-        }
-
-        cout << "\n\nНаводка" << endl;
-        cout << "Буква: ";
-        cin >> l;
+        cout << endl;
+        printPLG_USR();
+        cout << "\n\nНаводка" << endl << "Координаты(первый символ-буква, второй-цифра): ";
+        cin >> l >> y;
         for(int i=0; i<11; i++)
         {
             if(letter[i] == l)
                 x = i;
         }
-        cout << "Цифра: ";
-        cin >> y;
         cout << endl << endl << endl << endl << endl << endl << endl << endl;
         if(field[x-1][y-1]=='#')
         {
             fieldPOLYG[x-1][y-1] = 'X';
             system("clear");
-            cout << "\nПопадание!\n";
-            cout << endl << "Map: \n";
-            for(int i=0; i<11; i++)
-            {
-                for(int j=0; j<11; j++)
-                {
-                    if(i == 0)
-                        cout << j << " ";
-                    else if(j>0 && i>0)
-                        cout<<fieldPOLYG[i-1][j-1]<<" ";
-                }
-                if(i == 10)
-                    break;
-                cout << endl << letter[i+1] << " ";
-            }
+            cout << "\n\nПопадание!\n\n";
         }
         else
         {
             fieldPOLYG[x-1][y-1] = '@';
             system("clear");
-            cout << "\nПромах!\n";
-            cout << endl;
-            for(int i=0; i<11; i++)
-            {
-                for(int j=0; j<11; j++)
-                {
-                    if(i == 0)
-                        cout << j << " ";
-                    else if(j>0 && i>0)
-                        cout<<fieldPOLYG[i-1][j-1]<<" ";
-                }
-                if(i == 10)
-                    break;
-                cout << endl << letter[i+1] << " ";
-            }
-
+            cout << "\n\nВы не попали по кораблю противника!\n\n";
 
             //def
             short int stepRandF=1;
@@ -595,7 +540,7 @@ void ai_field()
                 if(fieldUSER[FcordX][FcordY] == '#')
                 {
                     fieldUSER[FcordX][FcordY] = 'X';
-                    cout << "\n\nБот попал!";
+                    cout << "Бот попал! ";
                     stepRandF++;
                 }
                 if(fieldUSER[FcordX][FcordY] == '@')
@@ -603,7 +548,7 @@ void ai_field()
                 if(fieldUSER[FcordX][FcordY] == '.')
                 {
                     fieldUSER[FcordX][FcordY] = '@';
-                    cout << "\n\nБот промахнулся!";
+                    cout << "Бот промахнулся!";
                 }
             }
         }
@@ -612,8 +557,8 @@ void ai_field()
 
 int main()
 {
-    //точка возрата
-    cout << "\t\tSeaBattle\n\n";
+    system("clear");
+    cout << "\n\t\t\t\t\t\tSeaBattle\n\n\n";
     ai_field();
     return 0;
 }
